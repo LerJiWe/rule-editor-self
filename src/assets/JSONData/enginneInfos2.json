@@ -1,0 +1,228 @@
+[
+  {
+    "engineCode": "A3-05-1",
+    "tempContent": {
+      "logic": [
+        {
+          "ruleID": 20,
+          "data": {
+            "type": "anyCond",
+            "name": "any"
+          },
+          "children": [
+            {
+              "data": {
+                "type": "allCond",
+                "name": "all"
+              },
+              "children": [
+                {
+                  "data": {
+                    "type": "basic",
+                    "name": "A"
+                  },
+                  "leaf": true
+                },
+                {
+                  "data": {
+                    "type": "basic",
+                    "name": "B"
+                  },
+                  "leaf": true
+                }
+              ]
+            },
+            {
+              "data": {
+                "type": "allCond",
+                "name": "all"
+              },
+              "children": [
+                {
+                  "data": {
+                    "type": "basic",
+                    "name": "C"
+                  },
+                  "leaf": true
+                },
+                {
+                  "data": {
+                    "type": "basic",
+                    "name": "D"
+                  },
+                  "leaf": true
+                }
+              ]
+            }
+          ],
+          "ruleID": "20",
+          "rule": "or(and(A,B),and(C,D))"
+        }
+      ],
+      "conditions": [
+        {
+          "id": "A",
+          "caseVariable": {
+            "name": "日劑量",
+            "value": "dailyQty"
+          },
+          "operator": {
+            "name": "小於等於",
+            "value": "lessThanInclusive"
+          },
+          "value": "2",
+          "params": "unit=Amp"
+        },
+        {
+          "id": "B",
+          "caseVariable": {
+            "name": "總天數",
+            "value": "usedDays"
+          },
+          "operator": {
+            "name": "小於等於",
+            "value": "lessThanInclusive"
+          },
+          "value": "3",
+          "params": ""
+        },
+        {
+          "id": "C",
+          "caseVariable": {
+            "name": "頻率",
+            "value": "freq"
+          },
+          "operator": {
+            "name": "屬於",
+            "value": "in"
+          },
+          "value": "STAT",
+          "params": ""
+        },
+        {
+          "id": "D",
+          "caseVariable": {
+            "name": "總劑量",
+            "value": "totalQty"
+          },
+          "operator": {
+            "name": "小於等於",
+            "value": "lessThanInclusive"
+          },
+          "value": "5",
+          "params": ""
+        }
+      ],
+      "message": [
+        {
+          "ruleID": "20",
+          "msgClass": {
+            "name": "錯誤訊息",
+            "value": "err"
+          },
+          "msgParams": "",
+          "content": "依健保規範，Human Albumin限每日最多兩瓶，最多開三天份，且STAT總量不宜超過5瓶。"
+        }
+      ]
+    },
+    "ruleContent": [
+      {
+        "conditions": {
+          "priority": 1,
+          "any": [
+            {
+              "priority": 1,
+              "all": [
+                {
+                  "operator": "lessThanInclusive",
+                  "value": 2,
+                  "fact": "dailyQty_unit_Amp",
+                  "params": {
+                    "bId": "A"
+                  }
+                },
+                {
+                  "operator": "lessThanInclusive",
+                  "value": 3,
+                  "fact": "usedDays_for_N",
+                  "params": {
+                    "bId": "B"
+                  }
+                }
+              ]
+            },
+            {
+              "priority": 1,
+              "all": [
+                {
+                  "operator": "in",
+                  "value": [
+                    "STAT"
+                  ],
+                  "fact": "freq",
+                  "params": {
+                    "bId": "C"
+                  }
+                },
+                {
+                  "operator": "lessThanInclusive",
+                  "value": 5,
+                  "fact": "totalQty_for_N",
+                  "params": {
+                    "bId": "D"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "priority": 80,
+        "event": {
+          "type": "event",
+          "params": {
+            "msgs": [
+              {
+                "params": {
+                  "rOn": false,
+                  "eType": "R"
+                },
+                "content": "依健保規範，Human Albumin限每日最多兩瓶，最多開三天份，且STAT總量不宜超過5瓶。"
+              }
+            ]
+          }
+        },
+        "name": "rule_20"
+      }
+    ],
+    "factContent": [
+      {
+        "variable": "dailyQty",
+        "params": {
+          "unit": "Amp"
+        },
+        "fullName": "dailyQty_unit_Amp"
+      },
+      {
+        "variable": "usedDays",
+        "params": {
+          "for": "N"
+        },
+        "fullName": "usedDays_for_N"
+      },
+      {
+        "variable": "freq",
+        "fullName": "freq"
+      },
+      {
+        "variable": "totalQty",
+        "params": {
+          "for": "N"
+        },
+        "fullName": "totalQty_for_N"
+      }
+    ],
+    "operatorContent": [],
+    "systemUser": 33878,
+    "systemTime": "2021-06-09T03:12:12.296Z"
+  }
+]

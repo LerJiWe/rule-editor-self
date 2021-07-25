@@ -1,0 +1,63 @@
+<p-fieldset legend="基礎規則" class="fieldset-basic">
+  <p-table [value]="basicConds" selectionMode="single">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="bc-plus" (click)="addBasicCond()"><i class="pi pi-plus"></i></th>
+        <th class="bc-id">ID</th>
+        <th class="bc-fact">fact</th>
+        <th class="bc-operator">operator</th>
+        <th class="bc-params">params</th>
+        <th class="bc-value">value</th>
+        <th class="bc-btn"></th>
+        <th class="bc-btn"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-cond let-i="rowIndex">
+      <tr [pSelectableRow]="cond">
+        <td class="bc-plus" (click)="removeBasicCond(i)"><i class="pi pi-times"></i></td>
+        <td class="bc-id">{{cond.id}}</td>
+        <td class="bc-fact">{{cond.caseVariable.name}}</td>
+        <td class="bc-operator">{{cond.operator.name}}</td>
+        <td class="bc-params">{{cond.params}}</td>
+        <td class="bc-value">{{cond.value}}</td>
+        <td class="bc-btn">
+          <button type="button">解除控管</button>
+        </td>
+        <td class="bc-btn">
+          <button type="button">控管</button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-fieldset>
+
+<p-fieldset legend="組合規則" class="fieldset-rule">
+  <button type="button" (click)="addAnyRule()">新增any規則</button>
+  <button type="button" (click)="addAllRule()">新增all規則</button>
+  <button type="button" (click)="showRule()">顯示規則</button>
+  <p-treeTable [value]="ruleTrees" selectionMode="single" (onNodeSelect)="nodeSelect($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="tree-remove"><i class="pi pi-times"></i></th>
+        <th class="tree-btns"><i class="pi pi-cog"></i></th>
+        <th>TYPE</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-index="rowIndex">
+      <tr>
+        <td class="tree-remove" (click)="removeCond(rowNode.node, index)"><i class="pi pi-times"></i></td>
+        <td class="tree-btns">
+          <button type="button" *ngIf="rowData.type==='allCond'" (click)="addAnyCond(rowNode.node)">+any</button>
+          <button type="button" *ngIf="rowData.type==='anyCond'" (click)="addAllCond(rowNode.node)">+all</button>
+          <button type="button" *ngIf="rowData.type!=='basic'" (click)="addBasicRule(rowNode.node)">+basic</button>
+        </td>
+        <td ttEditableColumn>
+          <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+          <span *ngIf="rowData.type!=='basic'">{{ rowData.name }}</span>
+          <p-dropdown *ngIf="rowData.type=='basic'" [options]="basicCondOptions" [(ngModel)]="rowData.name">
+          </p-dropdown>
+        </td>
+      </tr>
+    </ng-template>
+  </p-treeTable>
+</p-fieldset>
